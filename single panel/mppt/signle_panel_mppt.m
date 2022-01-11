@@ -11,7 +11,6 @@ n = 1;  % number of panels
 Voc = 43.99;
 ramp_slope = n * Voc / sim_time;  % n times Voc of one minus Vd
 Ts = 1e-3;  % sampling time
-tau = 1e-7;
 max_time_step = 1e-4; % variable step solver max step size
 duty_step = 1/400;
 P_1000 = 175.087; % W
