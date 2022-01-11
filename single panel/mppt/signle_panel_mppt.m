@@ -6,7 +6,7 @@ set(groot, 'defaulttextinterpreter','latex');
 set(groot, 'defaultAxesTickLabelInterpreter','latex');  
 set(groot, 'defaultLegendInterpreter','latex');
 %% Parameters
-sim_time = 0.5;   % simulation time
+sim_time = 5;   % simulation time
 n = 1;  % number of panels
 Voc = 43.99;
 Ts = 1e-3;  % sampling time
