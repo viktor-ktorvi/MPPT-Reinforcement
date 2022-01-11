@@ -14,6 +14,7 @@ Ts = 1e-3;  % sampling time
 tau = 1e-7;
 max_time_step = 1e-4; % variable step solver max step size
 duty_step = 1/400;
-P_max = 175.087; % W
+P_1000 = 175.087; % W
+P_500 = 86.79;
 %% Sim
 % out = sim('single_panel_mppt_sim.slx');
