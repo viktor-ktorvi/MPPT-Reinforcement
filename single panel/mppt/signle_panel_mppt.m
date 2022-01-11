@@ -7,7 +7,6 @@ set(groot, 'defaultAxesTickLabelInterpreter','latex');
 set(groot, 'defaultLegendInterpreter','latex');
 %% Parameters
 sim_time = 5;   % simulation time
-n = 1;  % number of panels
 Voc = 43.99;
 Ts = 1e-3;  % sampling time
 max_time_step = 1e-4; % variable step solver max step size
@@ -36,15 +35,16 @@ title('Irradiance profile')
 xlabel('t [$s$]')
 ylabel('Irradiance [$\frac{W}{m^2}$]')
 
-% open_system('single_panel_mppt_sim.slx');
+open_system('single_panel_mppt_sim.slx');
 
 matlabFunctionBlock('single_panel_mppt_sim/irr_profile', Irr)
 
-% exec_times = zeros(1, 10);
-% for i = 1:10
-% tic
-% sim("single_panel_mppt_sim.slx");
-% exec_times(i) = toc;
-% end
-% 
-% fprintf('Avegage execituon time = %2.5f', mean(exec_times));
+num = 5;
+exec_times = zeros(1, num);
+for i = 1:num
+tic
+sim("single_panel_mppt_sim.slx");
+exec_times(i) = toc;
+end
+
+fprintf('Avegage execituon time = %2.5f', mean(exec_times));
