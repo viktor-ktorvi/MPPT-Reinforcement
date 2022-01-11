@@ -11,7 +11,7 @@ n = 1;  % number of panels
 ramp_slope = n * 43.99 / sim_time;  % n times Voc of one minus Vd
 Ts = 1e-4;  % sampling time
 max_time_step = 1e-4; % variable step solver max step size
-Irradiance = 500; % W/m^2
+Irradiance = 1000; % W/m^2
 T = 25; % 'C
 %% Sim
 out = sim('single_panel_sim.slx');
