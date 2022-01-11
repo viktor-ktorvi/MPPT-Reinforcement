@@ -23,7 +23,9 @@ gamma = 0.9;
 alpha = 0.1;
 exploration_factor_init = 0.9999;
 
-actions = [-duty_step, 0, duty_step];
+% how to make this more general? Like explore more when things have changed
+
+actions = (-1:1) * duty_step;
 n_V = 100;
 n_I = 100;
 %% Irradiance profile
