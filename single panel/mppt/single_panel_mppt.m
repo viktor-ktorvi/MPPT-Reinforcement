@@ -50,6 +50,20 @@ ylabel('Irradiance [$\frac{W}{m^2}$]')
 
 matlabFunctionBlock('single_panel_mppt_sim/irr_profile', Irr)
 
+%% Sim
+out = sim('single_panel_mppt_sim.slx');
+%%
+figure;
+hold on
+% grid on
+plot(out.power, 'LineWidth', 2)
+plot(out.mpp, 'LineWidth', 2)
+title("Maximum power point tracking" + newline + "Q table")
+xlabel('t [$s$]')
+ylabel('P [$W$]')
+legend('generated power', 'maximum power point', 'Location','southeast')
+
+%% Execution time analysis 
 % num = 5;
 % exec_times = zeros(1, num);
 % for i = 1:num
