@@ -5,6 +5,9 @@ clear variables;
 set(groot, 'defaulttextinterpreter','latex');  
 set(groot, 'defaultAxesTickLabelInterpreter','latex');  
 set(groot, 'defaultLegendInterpreter','latex');
+
+% TODO temp profile
+% TODP panel as a lookup
 %% Parameters
 sim_time = 2;   % simulation time [s]
 Voc = 43.99; % V
@@ -18,10 +21,10 @@ T = 25; % 'C TODO make a temperature profile
 load('../power as a function of irradiance/mpp_versus_irr_data_at_T_25.mat')
 %% Q parameters
 deg_threshold = deg2rad(5);
-wp = 1;
-wn = 4;
-gamma = 0.9;
-alpha = 0.1;
+wp = 1; % positive reward weight
+wn = 4; % negative reward weight
+gamma = 0.9;    % discount factor
+alpha = 0.1;    % learning rate
 exploration_factor_init = 0.9999;
 
 % how to make this more general? Like explore more when things have changed
