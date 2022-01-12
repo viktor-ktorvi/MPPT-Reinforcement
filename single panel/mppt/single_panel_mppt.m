@@ -45,6 +45,7 @@ title('Irradiance profile')
 xlabel('t [$s$]')
 ylabel('Irradiance [$\frac{W}{m^2}$]')
 
+% uncomment if next line throws an error
 % open_system('single_panel_mppt_sim.slx');
 
 matlabFunctionBlock('single_panel_mppt_sim/irr_profile', Irr)
