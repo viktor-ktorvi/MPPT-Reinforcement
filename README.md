@@ -2,7 +2,7 @@
 
 Maximum power point tracking([MPPT](https://en.wikipedia.org/wiki/Maximum_power_point_tracking)) algortihms and reinforcement learning. This repository is, for now, limited to solar cells. You can also do it with wind.
 
-## What's is MPPT?
+## What's MPPT?
 It's like climbing a hill except the hill is made of power and all you have is voltage. Sometimes, if you're really unlucky, you're climbing multiple hills... 
 
 
