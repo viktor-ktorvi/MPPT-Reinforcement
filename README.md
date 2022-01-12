@@ -3,11 +3,13 @@
 Maximum power point tracking([MPPT](https://en.wikipedia.org/wiki/Maximum_power_point_tracking)) algortihms and reinforcement learning. This repository is, for now, limited to solar cells. You can also do it with wind.
 
 ## What's is MPPT?
-It's like climbing a hill except the hill is made of power and all you have is voltage. Sometimes, if you're really unlucky, you're climbing multiple hills... We'll get to that.
+It's like climbing a hill except the hill is made of power and all you have is voltage. Sometimes, if you're really unlucky, you're climbing multiple hills... 
 
-![untitled](https://user-images.githubusercontent.com/69254199/149011438-c53af46e-cf2e-4a34-87e4-5e945fd84d21.png)
 
-Fig 1. PV curve with the maximum power point(MPP, the red thing). The goal is to get to the red thing.
+Uniform irradiance | Partial shading 
+:-------------------------:|:-------------------------:
+![](https://user-images.githubusercontent.com/69254199/149011438-c53af46e-cf2e-4a34-87e4-5e945fd84d21.png)  |  ![](https://user-images.githubusercontent.com/69254199/149194992-f5cb5d91-46d8-4a2d-9f0f-7de6a9fc1e3f.png)
+Fig 1. PV curve with the maximum power point(MPP, the red thing). The goal is to get to the red thing. | Fig 2. PV curve with multiple local maximum power points. The goal is still to get to the red thing - the global MPP.
 <hr>
 
 ## What can you do about it?
@@ -24,13 +26,15 @@ This is where the fun is.
 
 ## A comparison
 
+Let's compare two algorithms as they try to track the MPP as it changes over time.
+
 ### Perturb and observe
 
 Climbs a hill. Knows what left, right, up and down are. Does the job well. Is short sighted - optimizes locally.
 
 ![pno](https://user-images.githubusercontent.com/69254199/149156013-2e73ce2a-b972-4c35-89bc-731606ecd50a.png)
 
-Fig 2. Perturb and observe algorithm. Quick, clean, realiable.
+Fig 3. Perturb and observe algorithm. Quick, clean, realiable.
 <hr>
 
 ### Q learning with Q table
@@ -40,4 +44,4 @@ Climbs a hill without knowing what a hill is. Never heard of up and down, left o
 
 ![qtable](https://user-images.githubusercontent.com/69254199/149156056-14f91d4a-a12a-419f-8211-96fb46a5debc.png)
 
-Fig 3. Q learning with Q table. Takes a while to warm up, is a little sloppy but gets the job done.
+Fig 4. Q learning with Q table. Takes a while to warm up, is a little sloppy but gets the job done.
