@@ -10,6 +10,9 @@ Uniform irradiance | Partial shading
 :-------------------------:|:-------------------------:
 ![](https://user-images.githubusercontent.com/69254199/149011438-c53af46e-cf2e-4a34-87e4-5e945fd84d21.png)  |  ![](https://user-images.githubusercontent.com/69254199/149194992-f5cb5d91-46d8-4a2d-9f0f-7de6a9fc1e3f.png)
 Fig 1. PV curve with the maximum power point(MPP, the red thing). The goal is to get to the red thing. | Fig 2. PV curve with multiple local maximum power points. The goal is still to get to the red thing - the global MPP.
+
+
+The scenario in Fig 1. happens when there is 1 or no bypass diodes(the ones parallel to the panel) on the string of solar panels connected to one converter or if there are more  but they are all irradiated equaly. However, if there are more bypass diodes per converter and the panels are partially shaded i.e. they aren't irradiated equaly you get what's shown on Fig 2. - a mess. In that case a global search algorithm would be cool. In the first scenarion, a local one will suffice. 
 <hr>
 
 ## What can you do about it?
