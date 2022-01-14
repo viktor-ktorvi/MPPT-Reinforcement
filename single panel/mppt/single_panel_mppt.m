@@ -68,12 +68,12 @@ ylabel('P [$W$]')
 legend('generated power', 'maximum power point', 'Location','southeast')
 
 %% Execution time analysis 
-% num = 5;
-% exec_times = zeros(1, num);
-% for i = 1:num
-% tic
-% sim("single_panel_mppt_sim.slx");
-% exec_times(i) = toc;
-% end
-% 
-% fprintf('Avegage execituon time = %2.5f', mean(exec_times));
+num = 5;
+exec_times = zeros(1, num);
+for i = 1:num
+    tic
+    sim("single_panel_mppt_sim.slx");
+    exec_times(i) = toc;
+end
+
+fprintf('Avegage execituon time = %2.5f', mean(exec_times));
