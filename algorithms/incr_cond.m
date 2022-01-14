@@ -17,21 +17,17 @@ function duty = incr_cond(I, V, duty_step)
     % doesn't work
     if dV == 0
         if dI == 0
-            duty = duty_old + duty_step;
+            duty = duty_old;
         elseif dI > 0
-            duty = duty_old + duty_step;
-        else
             duty = duty_old - duty_step;
+        else
+            duty = duty_old + duty_step;
         end
     else
         if dI / dV == I / V
-            duty = duty_old + duty_step;
+            duty = duty_old;
         elseif dI / dV > - I / V
-            if dV > 0
-                duty = duty_old + duty_step;
-            else
-                duty = duty_old - duty_step;
-            end
+            duty = duty_old + duty_step;
         else
             duty = duty_old - duty_step;
         end

@@ -7,7 +7,6 @@ set(groot, 'defaultAxesTickLabelInterpreter','latex');
 set(groot, 'defaultLegendInterpreter','latex');
 
 % TODO temp profile
-% TODP panel as a lookup
 %% Parameters
 sim_time = 2;   % simulation time [s]
 Voc = 43.99; % V
@@ -68,12 +67,12 @@ ylabel('P [$W$]')
 legend('generated power', 'maximum power point', 'Location','southeast')
 
 %% Execution time analysis 
-num = 5;
-exec_times = zeros(1, num);
-for i = 1:num
-    tic
-    sim("single_panel_mppt_sim.slx");
-    exec_times(i) = toc;
-end
-
-fprintf('Avegage execituon time = %2.5f', mean(exec_times));
+% num = 5;
+% exec_times = zeros(1, num);
+% for i = 1:num
+%     tic
+%     sim("single_panel_mppt_sim.slx");
+%     exec_times(i) = toc;
+% end
+% 
+% fprintf('Avegage execituon time = %2.5f', mean(exec_times));
