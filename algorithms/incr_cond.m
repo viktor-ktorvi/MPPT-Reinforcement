@@ -11,10 +11,6 @@ function duty = incr_cond(I, V, duty_step)
     dV = V - V_old;
     dI = I - I_old;
 
-    % I think that the equality checks are useless but the flowcharts say
-    % so, they can't hurt
-    
-    % doesn't work
     if dV == 0
         if dI == 0
             duty = duty_old;
@@ -24,7 +20,9 @@ function duty = incr_cond(I, V, duty_step)
             duty = duty_old + duty_step;
         end
     else
-        if dI / dV == I / V
+        % there should, maybe, be a check to see if V is 0, just to avoid 
+        % dividing with 0
+        if dI / dV == I / V     
             duty = duty_old;
         elseif dI / dV > - I / V
             duty = duty_old + duty_step;
@@ -33,7 +31,7 @@ function duty = incr_cond(I, V, duty_step)
         end
     end
 
-    % make sure duty cycle between 0 and 1
+    % make sure the duty cycle is between 0 and 1
     if duty <= 0
         duty = duty_step;
     end

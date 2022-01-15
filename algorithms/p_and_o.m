@@ -28,7 +28,7 @@ function duty = p_and_o(I, V, duty_step)
         end
     end
     
-    % make sure duty cycle between 0 and 1
+    % make sure the duty cycle is between 0 and 1
     if duty <= 0
         duty = duty_step;
     end
