@@ -99,8 +99,8 @@ sigma_weights = 0.1;
 layer_sizes = [size(X, 1); 4; 6; size(labels, 1)];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @tanh; @tanh; @sigmoid};
-d_activations = {@d_tanh; @d_tanh; @d_tanh; @d_sigmoid};
+activations = {@tanh; @tanh; @sigmoid};
+d_activations = {@d_tanh; @d_tanh; @d_sigmoid};
 
 
 % error derivative

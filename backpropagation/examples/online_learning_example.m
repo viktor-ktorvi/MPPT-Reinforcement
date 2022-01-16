@@ -25,8 +25,8 @@ clip_val = 0.1;
 layer_sizes = [2; 20; 20; 1];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @tanh; @tanh; @linear};
-d_activations = {@d_tanh; @d_tanh; @d_tanh; @d_linear};
+activations = {@tanh; @tanh; @linear};
+d_activations = {@d_tanh; @d_tanh; @d_linear};
 
 % error derivative
 dEdy = @d_mse;

@@ -6,7 +6,7 @@ set(groot, 'defaulttextinterpreter','latex');
 set(groot, 'defaultAxesTickLabelInterpreter','latex');  
 set(groot, 'defaultLegendInterpreter','latex');
 %% Sim parameters
-sim_time = 3;   % simulation time [s]
+sim_time = 0.75;   % simulation time [s]
 Ts = 1e-4;  % sampling time
 Voc = 43.99; % V
 Isc = 5.17; % A
@@ -36,8 +36,8 @@ clip_val = 0.5;
 layer_sizes = [3 + 1; 10; 10; length(actions)];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @relu; @relu; @linear};
-d_activations = {@d_tanh; @d_relu; @d_relu; @d_linear};
+activations = {@relu; @relu; @linear};
+d_activations = {@d_relu; @d_relu; @d_linear};
 
 % error derivative
 dEdy = @d_mse;
