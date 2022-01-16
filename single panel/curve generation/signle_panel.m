@@ -18,7 +18,7 @@ gamma_correction = 1/5;
 % a scaling factor that 
 k = Voc / (ramp_slope * sim_time) ^ gamma_correction;  
 
-Ts = 1e-4;  % sampling time
+Ts = 0.5e-4;  % sampling time
 max_time_step = 1e-4; % variable step solver max step size
 Irradiance = 1000; % W/m^2
 T = 25; % 'C
