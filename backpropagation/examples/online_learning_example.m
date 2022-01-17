@@ -22,7 +22,7 @@ clip_norm = 1;
 clip_val = 0.1;
 %% Network
 % layer def
-layer_sizes = [2; 20; 20; 1];
+layer_sizes = [1; 20; 20; 1];
 
 % activation functions and their derivatives by layer
 activations = {@tanh; @tanh; @linear};
@@ -49,7 +49,7 @@ for x = start:step:stop
     target_sequence(counter) = target;
     
     % forward pass
-    output_sequence(counter) = model.forward_pass([x; ones(length(x))]);
+    output_sequence(counter) = model.forward_pass(x);
     
     % backward pass
     model.backward_pass(target);

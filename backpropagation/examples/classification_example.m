@@ -73,10 +73,10 @@ xlabel('$x_1$')
 ylabel('$x_2$')
 legend('class A', 'class B')
 
-X_train_norm = [ones(1, size(data_train_norm, 2)); data_train_norm];
-X_test_norm = [ones(1, size(data_test_norm, 2)); data_test_norm];
+% X_train_norm = [ones(1, size(data_train_norm, 2)); data_train_norm];
+% X_test_norm = [ones(1, size(data_test_norm, 2)); data_test_norm];
 
-X = X_train_norm;
+X = data_train_norm;
 
 %% Network parameters
 
@@ -129,7 +129,7 @@ ylabel('Error')
 
 %% Results
 range = 1:size(labels_test, 2); % which samples to test on
-[accuracy, prediction, ground_truth] = classification_accuracy(model, X_test_norm, labels_test, range);
+[accuracy, prediction, ground_truth] = classification_accuracy(model, data_test_norm, labels_test, range);
 fprintf("\nTest accuracy = %2.2f %%\n", 100 * accuracy)
 
 figure

@@ -6,7 +6,7 @@ set(groot, 'defaulttextinterpreter','latex');
 set(groot, 'defaultAxesTickLabelInterpreter','latex');  
 set(groot, 'defaultLegendInterpreter','latex');
 %% Sim parameters
-sim_time = 0.75;   % simulation time [s]
+sim_time = 1.75;   % simulation time [s]
 Ts = 1e-4;  % sampling time
 Voc = 43.99; % V
 Isc = 5.17; % A
@@ -22,7 +22,7 @@ gamma = 0.9;    % discount factor
 actions = (-1:1) * duty_step;
 %% Network parameters
 
-learning_rate = 0.003;
+learning_rate = 0.001;
 lambda = 0.0000;
 
 sigma_weights = 0.5;
@@ -33,7 +33,7 @@ clip_norm = 1;
 clip_val = 0.5;
 %% Network
 % layer def
-layer_sizes = [3 + 1; 10; 10; length(actions)];
+layer_sizes = [3; 10; 10; length(actions)];
 
 % activation functions and their derivatives by layer
 activations = {@relu; @relu; @linear};
@@ -51,6 +51,9 @@ loss_array = zeros(length(iterations), 1);
 
 duty = 0;
 
+% TODO stop putting in deg and put in V, I, dV, dI, and save dV_old and
+% dI_old
+
 I_old = 0;
 V_old = 0;
 deg_old = 1;
@@ -60,7 +63,7 @@ for i = 1:length(iterations)
 
     % measure environment
     V_measured = duty * Voc;
-    I_measured = interp1(voltage, current, V_measured,'linear');
+    I_measured = interp1(voltage, current, V_measured,'linear') + randn * Isc * 0.001;
     
     power_array(i) = V_measured * I_measured;
     duty_array(i) = duty;
@@ -90,11 +93,11 @@ for i = 1:length(iterations)
     
 
     % Bellman equation
-    q_star_t = model.forward_pass([V; I; deg; 1]);
+    q_star_t = model.forward_pass([V; I; deg]);
     q_star_t1 = R + gamma * max(q_star_t);
     
     % forward pass
-    q_t1 = model.forward_pass([V_old; I_old; deg_old; 1]);
+    q_t1 = model.forward_pass([V_old; I_old; deg_old]);
     
     loss_array(i) = 0.5 * sum((q_t1 - q_star_t1).^2);
     % backward pass
