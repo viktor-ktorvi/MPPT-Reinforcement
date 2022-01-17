@@ -6,7 +6,7 @@ set(groot, 'defaulttextinterpreter','latex');
 set(groot, 'defaultAxesTickLabelInterpreter','latex');  
 set(groot, 'defaultLegendInterpreter','latex');
 %% Sim parameters
-sim_time = 1.75;   % simulation time [s]
+sim_time = 2.5;   % simulation time [s]
 Ts = 1e-4;  % sampling time
 Voc = 43.99; % V
 Isc = 5.17; % A
@@ -20,10 +20,12 @@ wp = 1; % positive reward weight
 wn = 4; % negative reward weight
 gamma = 0.9;    % discount factor
 actions = (-1:1) * duty_step;
+
+buffer_size = 3;
 %% Network parameters
 
 learning_rate = 0.001;
-lambda = 0.0000;
+lambda = 0.000;
 
 sigma_weights = 0.5;
 
@@ -33,14 +35,14 @@ clip_norm = 1;
 clip_val = 0.5;
 %% Network
 % layer def
-layer_sizes = [3; 10; 10; length(actions)];
+layer_sizes = [3 * buffer_size; 5 * buffer_size; 5 * buffer_size; length(actions)];
 
 % activation functions and their derivatives by layer
-activations = {@relu; @relu; @linear};
-d_activations = {@d_relu; @d_relu; @d_linear};
+activations = {@tanh; @tanh; @sigmoid};
+d_activations = {@d_tanh; @d_tanh; @d_sigmoid};
 
 % error derivative
-dEdy = @d_mse;
+dEdy = @binary_cross_entropy;
 
 model = MultilayerPerceptron(layer_sizes, activations, d_activations, sigma_weights, dEdy, lambda, clip_flg, clip_norm, clip_val);
 %% Sim
@@ -51,13 +53,17 @@ loss_array = zeros(length(iterations), 1);
 
 duty = 0;
 
-% TODO stop putting in deg and put in V, I, dV, dI, and save dV_old and
-% dI_old
-
-I_old = 0;
-V_old = 0;
-deg_old = 1;
 duty_old = 0;
+
+V_buffer = zeros(buffer_size, 1);
+I_buffer = zeros(buffer_size, 1);
+deg_buffer = ones(buffer_size, 1) * pi;
+
+if mod(length(actions), 2) == 0
+    action_old = length(actions) / 2;
+else
+    action_old = (length(actions) + 1) / 2;
+end
 
 for i = 1:length(iterations)
 
@@ -68,14 +74,14 @@ for i = 1:length(iterations)
     power_array(i) = V_measured * I_measured;
     duty_array(i) = duty;
 
-    % maybe subtract 0.5 to center around 0
+    % normalize
     I = I_measured / Isc - 0.5;
     V = V_measured / Voc - 0.5;
 
     % calc changes
-    dI = I - I_old;
-    dV = V - V_old;
-    dP = V * I - V_old * I_old;
+    dI = I - I_buffer(1);
+    dV = V - V_buffer(1);
+    dP = V * I - V_buffer(1) * I_buffer(1);
     
 
     % see where deg is (are we close to the MPP or not?)
@@ -93,37 +99,54 @@ for i = 1:length(iterations)
     
 
     % Bellman equation
-    q_star_t = model.forward_pass([V; I; deg]);
-    q_star_t1 = R + gamma * max(q_star_t);
+    q_new = model.forward_pass([V; V_buffer(1:end-1); I; I_buffer(1:end-1); deg; deg_buffer(1:end-1)]);
+    expected_q = R + gamma * max(q_new);
     
     % forward pass
-    q_t1 = model.forward_pass([V_old; I_old; deg_old]);
+    q_old = model.forward_pass([V_buffer; I_buffer; deg_buffer]);
     
-    loss_array(i) = 0.5 * sum((q_t1 - q_star_t1).^2);
+    loss_array(i) = binary_cross_entropy(expected_q, q_old(action_old));
+    
+
+    target = q_old;
+    target(action_old) = expected_q;
+
     % backward pass
-    model.backward_pass(q_star_t1);
+    model.backward_pass(target);
     
     % weight update
     model.update_weights(learning_rate);
     
-    % maybe a third forward pass, but that might be too much
-    [~, argmax]  = max(q_star_t);
+%     q = model.forward_pass([V; V_buffer(1:end-1); I; I_buffer(1:end-1); deg; deg_buffer(1:end-1)]);
+    % maybe a third forward pass
+    [~, argmax]  = max(q_old);
 
     duty = duty_old + actions(argmax);
 
 
+
+
+    V_buffer = [V; V_buffer(1:end - 1)];
+    I_buffer = [I; I_buffer(1:end - 1)];
+    deg_buffer = [deg; deg_buffer(1:end - 1)];
+    action_old = argmax;
+
     if duty > 1 || duty < 0
         duty = duty_old;
+    
+        if mod(length(actions), 2) == 0
+            action_old = length(actions) / 2;
+        else
+            action_old = (length(actions) + 1) / 2;
+        end
     end
-
-    V_old = V;
-    I_old = I;
-    deg_old = deg;
     duty_old = duty;
+
 end
 %% Results
 figure;
 plot(iterations, loss_array)
+set(gca, 'YScale', 'log')
 title("Loss")
 xlabel('t [$s$]')
 ylabel('loss')
