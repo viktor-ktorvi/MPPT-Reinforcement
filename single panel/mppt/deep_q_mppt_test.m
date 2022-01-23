@@ -21,13 +21,15 @@ wn = 4; % negative reward weight
 gamma = 0.9;    % discount factor
 actions = (-1:1) * duty_step;
 
-buffer_size = 3;
+buffer_size = 1;
 %% Network parameters
 
-learning_rate = 0.001;
-lambda = 0.000;
+learning_rate = 0.005;
+lambda = 0.00001;
 
-sigma_weights = 0.5;
+% weight initialization
+init_options.name = "lecun";
+init_options.distribution = "gauss";
 
 % gradient clipping
 clip_flg = 0;
@@ -38,13 +40,13 @@ clip_val = 0.5;
 layer_sizes = [3 * buffer_size; 5 * buffer_size; 5 * buffer_size; length(actions)];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @tanh; @sigmoid};
-d_activations = {@d_tanh; @d_tanh; @d_sigmoid};
+activations = {@magic_tanh; @magic_tanh; @sigmoid};
+d_activations = {@d_magic_tanh; @d_magic_tanh; @d_sigmoid};
 
 % error derivative
 dEdy = @binary_cross_entropy;
 
-model = MultilayerPerceptron(layer_sizes, activations, d_activations, sigma_weights, dEdy, lambda, clip_flg, clip_norm, clip_val);
+model = MultilayerPerceptron(layer_sizes, activations, d_activations, init_options, dEdy, lambda, clip_flg, clip_norm, clip_val);
 %% Sim
 iterations = 0:Ts:sim_time;
 power_array = zeros(length(iterations), 1);

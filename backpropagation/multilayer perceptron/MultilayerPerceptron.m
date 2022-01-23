@@ -16,12 +16,12 @@ classdef MultilayerPerceptron < handle
     end
     
     methods
-        function obj = MultilayerPerceptron(layer_sizes, activations, d_activations, sigma_weights, dEdy, lambda, clip_flg, clip_norm, clip_val)
+        function obj = MultilayerPerceptron(layer_sizes, activations, d_activations, init_options, dEdy, lambda, clip_flg, clip_norm, clip_val)
             obj.layer_sizes = layer_sizes;
             obj.activations = activations;
             obj.d_activations = d_activations;
 
-            obj.W = obj.init_weights(sigma_weights);
+            obj.W = obj.init_weights(init_options);
             
             obj.dEdy = dEdy;
 
@@ -35,9 +35,22 @@ classdef MultilayerPerceptron < handle
             obj.clip_val = clip_val;
 
         end
+
+        function to_gpu(obj)
+            for i = 1:length(obj.W)
+                obj.W{i} = gpuArray(obj.W{i});
+            end
+
+%             obj.layer_sizes = gpuArray(obj.layer_sizes);
+% 
+%             obj.lambda = gpuArray(obj.lambda);
+%             obj.clip_flg = gpuArray(obj.clip_flg);
+%             obj.clip_norm = gpuArray(obj.clip_norm);
+%             obj.clip_val = gpuArray(obj.clip_val);
+        end
         
-        function W = init_weights(obj, sigma_weights)
-            W = init_weights(obj.layer_sizes, sigma_weights);
+        function W = init_weights(obj, init_options)
+            W = init_weights(obj.layer_sizes, obj.activations, init_options);
         end
         
         function out = forward_pass(obj, x)
@@ -65,13 +78,16 @@ classdef MultilayerPerceptron < handle
             obj.W = update_weights(obj.W, obj.dEdW, learning_rate);
         end
 
-        function error = train(obj, X, labels, batch_size, learning_rate, loss)
+        function error = train(obj, X, labels, batch_size, learning_rate, loss, gpu_flg)
             error = 0;
             for j = 1:batch_size:size(labels, 2)
                 range = j:min(j + batch_size - 1, size(X, 2));
         
                 % forward pass        
                 x = X(:, range);
+                if gpu_flg
+                    x = gpuArray(x);
+                end
                 out = obj.forward_pass(x);
                 
                 % backward pass

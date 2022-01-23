@@ -40,8 +40,8 @@ split_index = round(0.7 * size(data, 2));
 data_train = data(:, 1:split_index);
 labels_train = labels(:, 1:split_index);
 
-data_test = data(:, split_index:end);
-labels_test = labels(:, split_index:end);
+data_test = data(:, split_index + 1:end);
+labels_test = labels(:, split_index + 1:end);
 
 
 figure
@@ -91,7 +91,9 @@ clip_norm = 1;
 clip_val = 0.5;
 
 % weight initialization
-sigma_weights = 0.1;
+init_options.name = "xavier";
+init_options.distribution = "gauss";
+
 
 %% Network
 
@@ -99,14 +101,14 @@ sigma_weights = 0.1;
 layer_sizes = [size(X, 1); 4; 6; size(labels, 1)];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @tanh; @sigmoid};
-d_activations = {@d_tanh; @d_tanh; @d_sigmoid};
+activations = {@magic_tanh; @magic_tanh; @sigmoid};
+d_activations = {@d_magic_tanh; @d_magic_tanh; @d_sigmoid};
 
 
 % error derivative
 dEdy = @d_binary_cross_entrpoy;
 
-model = MultilayerPerceptron(layer_sizes, activations, d_activations, sigma_weights, dEdy, lambda, clip_flg, clip_norm, clip_val);
+model = MultilayerPerceptron(layer_sizes, activations, d_activations, init_options, dEdy, lambda, clip_flg, clip_norm, clip_val);
 
 
 %% Training

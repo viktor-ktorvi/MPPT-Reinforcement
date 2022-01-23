@@ -14,7 +14,9 @@ stop = 100 * 2 * pi;
 learning_rate = 0.01;
 lambda = 0.01;
 
-sigma_weights = 0.1;
+% weight initialization
+init_options.name = "xavier";
+init_options.distribution = "gauss";
 
 % gradient clipping
 clip_flg = 1;
@@ -25,13 +27,13 @@ clip_val = 0.1;
 layer_sizes = [1; 20; 20; 1];
 
 % activation functions and their derivatives by layer
-activations = {@tanh; @tanh; @linear};
-d_activations = {@d_tanh; @d_tanh; @d_linear};
+activations = {@magic_tanh; @magic_tanh; @linear};
+d_activations = {@d_magic_tanh; @d_magic_tanh; @d_linear};
 
 % error derivative
 dEdy = @d_mse;
 
-model = MultilayerPerceptron(layer_sizes, activations, d_activations, sigma_weights, dEdy, lambda, clip_flg, clip_norm, clip_val);
+model = MultilayerPerceptron(layer_sizes, activations, d_activations, init_options, dEdy, lambda, clip_flg, clip_norm, clip_val);
 
 %% Data
 input = (start:step:stop)';
